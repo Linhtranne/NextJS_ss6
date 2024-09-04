@@ -1,14 +1,18 @@
 'use client'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const SearchPage = () => {
   const router = useRouter();
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect(() => {
-    if (router.query.search) {
-      setSearchValue(router.query.search);
+    const searchQuery = router.query.search;
+
+    if (typeof searchQuery === 'string') {
+      setSearchValue(searchQuery);
+    } else if (Array.isArray(searchQuery)) {
+      setSearchValue(searchQuery[0]);
     }
   }, [router.query]);
 
@@ -18,7 +22,7 @@ const SearchPage = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          const query = e.target.search.value;
+          const query = e.currentTarget.search.value;
           router.push(`/search?search=${encodeURIComponent(query)}`);
         }}
       >
@@ -35,3 +39,4 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+
