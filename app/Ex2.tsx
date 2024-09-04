@@ -1,20 +1,19 @@
 'use client'
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const SearchPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect(() => {
-    const searchQuery = router.query.search;
+    const searchQuery = searchParams.get('search');
 
-    if (typeof searchQuery === 'string') {
+    if (searchQuery) {
       setSearchValue(searchQuery);
-    } else if (Array.isArray(searchQuery)) {
-      setSearchValue(searchQuery[0]);
     }
-  }, [router.query]);
+  }, [searchParams]);
 
   return (
     <div>
@@ -39,4 +38,3 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-
